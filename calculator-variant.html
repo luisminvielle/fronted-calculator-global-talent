@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Talent Cost Calculator - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            width: 120px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #0f766e;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .demo-badge {
+            background: #f87171;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-section {
+            padding-right: 2rem;
+        }
+
+        .hero-section h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #0f766e;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .calculator-section {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .calculator-header h3 {
+            font-size: 1.8rem;
+            color: #0f766e;
+            margin-bottom: 1rem;
+        }
+
+        .calculator-header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #f87171;
+            box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .results {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #f87171;
+        }
+
+        .results h4 {
+            color: #0f766e;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0f766e;
+            margin-top: 0.5rem;
+        }
+
+        .country-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #fef2f2;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #991b1b;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .feature-item p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 2rem 1rem;
+            }
+
+            .hero-section {
+                padding-right: 0;
+                text-align: center;
+            }
+
+            .hero-section h2 {
+                font-size: 2rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .calculator-section {
+                padding: 2rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="https://cdn.prod.website-files.com/683ed5bafb6d925e61d1e818/68652122561ff150f9475f5d_Asset%2031%402x.png"
+                     alt="Fronted Logo"
+                     style="width: 100px; height: 30px; object-fit: contain;">
+            </div>
+            <h1>Global Talent Cost Calculator</h1>
+            <div class="demo-badge">ALTERNATIVE DEMO</div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="hero-section">
+            <h2>Scale your company with global talent</h2>
+            <p>This alternative demo showcases a different visual approach while maintaining the same powerful cost calculation engine. Perfect for exploring international hiring costs across diverse markets.</p>
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h4>🌍 Global Reach</h4>
+                    <p>Access talent from 11+ countries worldwide</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📊 Cost Analysis</h4>
+                    <p>Detailed breakdown of employment expenses</p>
+                </div>
+                <div class="feature-item">
+                    <h4>💡 Smart Insights</h4>
+                    <p>Data-driven decisions for global hiring</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-section">
+            <div class="calculator-header">
+                <h3>Calculate Employment Costs</h3>
+                <p>Enter the relevant details for your role below to calculate the total cost of employment</p>
+            </div>
+
+            <form id="calculatorForm">
+                <div class="form-group">
+                    <label for="country">Select employee country</label>
+                    <select id="country" required>
+                        <option value="">Choose a country...</option>
+                        <option value="brazil">Brazil</option>
+                        <option value="philippines">Philippines</option>
+                        <option value="ukraine">Ukraine</option>
+                        <option value="romania">Romania</option>
+                        <option value="norway">Norway</option>
+                        <option value="sweden">Sweden</option>
+                        <option value="germany">Germany</option>
+                        <option value="france">France</option>
+                        <option value="netherlands">Netherlands</option>
+                        <option value="mexico">Mexico</option>
+                        <option value="united-states">United States</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="currency">Select currency</label>
+                    <select id="currency" required>
+                        <option value="">Choose a currency...</option>
+                        <option value="BRL">Brazilian Real (BRL)</option>
+                        <option value="PHP">Philippine Peso (PHP)</option>
+                        <option value="UAH">Ukrainian Hryvnia (UAH)</option>
+                        <option value="RON">Romanian Leu (RON)</option>
+                        <option value="NOK">Norwegian Krone (NOK)</option>
+                        <option value="SEK">Swedish Krona (SEK)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                        <option value="MXN">Mexican Peso (MXN)</option>
+                        <option value="USD">US Dollar (USD)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Enter annual salary</label>
+                    <input type="number" id="amount" placeholder="e.g., 50000" required min="1000">
+                </div>
+
+                <button type="submit" class="calculate-btn">Calculate Costs</button>
+            </form>
+
+            <div id="results" class="results" style="display: none;">
+                <h4>Estimated Employment Costs</h4>
+                <div id="resultDetails"></div>
+                <div class="country-info">
+                    <strong>Note:</strong> This alternative demo uses estimated figures for demonstration purposes. Please consult with local experts for accurate employment cost calculations.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Alternative demo employment cost data
+        const countryData = {
+            "brazil": {
+                name: "Brazil",
+                baseCost: 1.42,
+                taxes: 0.27,
+                benefits: 0.10,
+                overhead: 0.05,
+                currency: "BRL",
+                multiplier: 5.2
+            },
+            "philippines": {
+                name: "Philippines",
+                baseCost: 1.12,
+                taxes: 0.10,
+                benefits: 0.02,
+                overhead: 0.00,
+                currency: "PHP",
+                multiplier: 56
+            },
+            "ukraine": {
+                name: "Ukraine",
+                baseCost: 1.22,
+                taxes: 0.18,
+                benefits: 0.04,
+                overhead: 0.00,
+                currency: "UAH",
+                multiplier: 41
+            },
+            "romania": {
+                name: "Romania",
+                baseCost: 1.28,
+                taxes: 0.20,
+                benefits: 0.08,
+                overhead: 0.00,
+                currency: "RON",
+                multiplier: 4.5
+            },
+            "norway": {
+                name: "Norway",
+                baseCost: 1.23,
+                taxes: 0.18,
+                benefits: 0.05,
+                overhead: 0.00,
+                currency: "NOK",
+                multiplier: 10.5
+            },
+            "sweden": {
+                name: "Sweden",
+                baseCost: 1.32,
+                taxes: 0.22,
+                benefits: 0.10,
+                overhead: 0.00,
+                currency: "SEK",
+                multiplier: 10.2
+            },
+            "germany": {
+                name: "Germany",
+                baseCost: 1.20,
+                taxes: 0.18,
+                benefits: 0.02,
+                overhead: 0.00,
+                currency: "EUR",
+                multiplier: 0.85
+            },
+            "france": {
+                name: "France",
+                baseCost: 1.45,
+                taxes: 0.25,
+                benefits: 0.20,
+                overhead: 0.00,
+                currency: "EUR",
+                multiplier: 0.85
+            },
+            "netherlands": {
+                name: "Netherlands",
+                baseCost: 1.30,
+                taxes: 0.20,
+                benefits: 0.10,
+                overhead: 0.00,
+                currency: "EUR",
+                multiplier: 0.85
+            },
+            "mexico": {
+                name: "Mexico",
+                baseCost: 1.35,
+                taxes: 0.25,
+                benefits: 0.08,
+                overhead: 0.02,
+                currency: "MXN",
+                multiplier: 18
+            },
+            "united-states": {
+                name: "United States",
+                baseCost: 1.23,
+                taxes: 0.13,
+                benefits: 0.08,
+                overhead: 0.02,
+                currency: "USD",
+                multiplier: 1
+            }
+        };
+
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const country = document.getElementById('country').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (!country || !amount) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const data = countryData[country];
+            const salaryInLocalCurrency = amount * data.multiplier;
+
+            // Calculate costs
+            const baseSalary = salaryInLocalCurrency;
+            const taxes = baseSalary * data.taxes;
+            const benefits = baseSalary * data.benefits;
+            const overhead = baseSalary * data.overhead;
+            const totalCost = baseSalary + taxes + benefits + overhead;
+
+            // Display results
+            const results = document.getElementById('results');
+            const resultDetails = document.getElementById('resultDetails');
+
+            resultDetails.innerHTML = `
+                <div class="result-item">
+                    <span>Base Salary (${data.currency})</span>
+                    <span>${baseSalary.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+                <div class="result-item">
+                    <span>Taxes & Social Contributions</span>
+                    <span>${taxes.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+                <div class="result-item">
+                    <span>Benefits & Insurance</span>
+                    <span>${benefits.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+                <div class="result-item">
+                    <span>Overhead & Administration</span>
+                    <span>${overhead.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+                <div class="result-item">
+                    <span><strong>Total Employment Cost (${data.currency})</strong></span>
+                    <span><strong>${totalCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</strong></span>
+                </div>
+            `;
+
+            results.style.display = 'block';
+
+            // Scroll to results
+            results.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    </script>
+</body>
+</html>
