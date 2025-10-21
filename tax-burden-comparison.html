@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Talent Tax Burden Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 3rem 0 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 140px;
+            height: 45px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 6rem 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .hero-section h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .feature-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
+        }
+
+        .feature-card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Calculator */
+        .calculator-wrapper {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-header h3 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+        }
+
+        .calculator-header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(15, 23, 42, 0.8);
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .form-group select option {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 1.25rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Results */
+        .results {
+            margin-top: 2rem;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .results h4 {
+            color: #f1f5f9;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .country-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .country-card {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #3b82f6;
+            position: relative;
+        }
+
+        .country-card.best-deal {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
+        }
+
+        .country-card h5 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .country-flag {
+            width: 20px;
+            height: 15px;
+            border-radius: 2px;
+            object-fit: cover;
+        }
+
+        .tax-breakdown {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .tax-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .tax-item:last-child {
+            border-bottom: none;
+        }
+
+        .tax-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .tax-value {
+            color: #e2e8f0;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .total-tax {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%);
+            border-left: 4px solid #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .total-tax .tax-label,
+        .total-tax .tax-value {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .tax-savings {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .tax-savings h6 {
+            color: #fca5a5;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .savings-amount {
+            color: #ef4444;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+                padding: 4rem 0;
+            }
+
+            .hero-section h2 {
+                font-size: 2.8rem;
+            }
+
+            .header h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .calculator-wrapper {
+                padding: 2rem;
+            }
+
+            .feature-highlights {
+                grid-template-columns: 1fr;
+            }
+
+            .country-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .calculator-wrapper {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">TAX</div>
+                <h1>Global Talent Tax Burden Comparison</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="hero-section">
+                <h2>Compare Tax Burdens for Global Talent</h2>
+                <p>Analyze and compare tax implications for international talent across France, Switzerland, Philippines, and Belgium. Make informed decisions for global hiring strategies.</p>
+
+                <div class="feature-highlights">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">⚖️</div>
+                        <h3>Tax Expertise</h3>
+                        <p>Comprehensive analysis of income tax, social contributions, and employment costs</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-icon">🌍</div>
+                        <h3>Multi-Country</h3>
+                        <p>Compare tax burdens across four key global talent markets</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-icon">📊</div>
+                        <h3>Instant Analysis</h3>
+                        <p>Get detailed tax breakdowns and savings calculations in real-time</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-section">
+                <div class="calculator-wrapper">
+                    <div class="calculator-header">
+                        <h3>Tax Burden Calculator</h3>
+                        <p>Enter annual salary to compare tax implications across countries</p>
+                    </div>
+
+                    <form id="taxCalculatorForm">
+                        <div class="form-group">
+                            <label for="annualSalary">Annual Gross Salary (USD)</label>
+                            <input type="number" id="annualSalary" placeholder="e.g., 80000" required min="10000">
+                        </div>
+
+                        <button type="submit" class="calculate-btn">Compare Tax Burdens</button>
+                    </form>
+
+                    <div id="taxResults" class="results" style="display: none;">
+                        <h4>Tax Burden Comparison</h4>
+                        <div id="comparisonResults" class="comparison-grid">
+                            <div class="country-comparison"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tax data for each country (as percentage of gross salary)
+        const taxData = {
+            france: {
+                name: "France",
+                flag: "🇫🇷",
+                currency: "EUR",
+                exchangeRate: 0.85, // USD to EUR
+                incomeTax: 0.25, // Average effective income tax rate
+                socialContributions: 0.22, // Employee social contributions
+                employerContributions: 0.45, // Employer social contributions (paid by employer)
+                otherTaxes: 0.02, // Other employment-related taxes
+                totalTaxBurden: 0.47, // Total tax burden as % of gross salary
+                notes: "High social protection system with comprehensive benefits"
+            },
+            switzerland: {
+                name: "Switzerland",
+                flag: "🇨🇭",
+                currency: "CHF",
+                exchangeRate: 0.92, // USD to CHF
+                incomeTax: 0.18, // Progressive cantonal taxation
+                socialContributions: 0.125, // AHV/IV/EO (pension, disability, unemployment)
+                employerContributions: 0.125, // Employer social contributions
+                otherTaxes: 0.01, // Minimal other taxes
+                totalTaxBurden: 0.31, // Total tax burden as % of gross salary
+                notes: "Low tax burden with excellent public services"
+            },
+            philippines: {
+                name: "Philippines",
+                flag: "🇵🇭",
+                currency: "PHP",
+                exchangeRate: 56, // USD to PHP
+                incomeTax: 0.08, // Progressive income tax (lower brackets)
+                socialContributions: 0.045, // SSS, PhilHealth, Pag-IBIG
+                employerContributions: 0.105, // Employer social contributions
+                otherTaxes: 0.01, // Other employment taxes
+                totalTaxBurden: 0.19, // Total tax burden as % of gross salary
+                notes: "Competitive tax rates for skilled professionals"
+            },
+            belgium: {
+                name: "Belgium",
+                flag: "🇧🇪",
+                currency: "EUR",
+                exchangeRate: 0.85, // USD to EUR
+                incomeTax: 0.30, // High progressive income tax
+                socialContributions: 0.14, // Employee social security
+                employerContributions: 0.35, // Employer social security contributions
+                otherTaxes: 0.02, // Regional and local taxes
+                totalTaxBurden: 0.52, // Total tax burden as % of gross salary
+                notes: "Comprehensive social welfare system"
+            }
+        };
+
+        document.getElementById('taxCalculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const annualSalaryUSD = parseFloat(document.getElementById('annualSalary').value);
+
+            if (!annualSalaryUSD || annualSalaryUSD < 10000) {
+                alert('Please enter a valid annual salary (minimum $10,000 USD)');
+                return;
+            }
+
+            // Calculate tax burdens for each country
+            const results = Object.keys(taxData).map(countryKey => {
+                const country = taxData[countryKey];
+                const grossSalaryLocal = annualSalaryUSD * country.exchangeRate;
+
+                return {
+                    ...country,
+                    grossSalaryUSD: annualSalaryUSD,
+                    grossSalaryLocal: grossSalaryLocal,
+                    incomeTaxAmount: grossSalaryLocal * country.incomeTax,
+                    socialContributionsAmount: grossSalaryLocal * country.socialContributions,
+                    employerContributionsAmount: grossSalaryLocal * country.employerContributions,
+                    otherTaxesAmount: grossSalaryLocal * country.otherTaxes,
+                    totalTaxAmount: grossSalaryLocal * country.totalTaxBurden,
+                    netSalary: grossSalaryLocal * (1 - country.totalTaxBurden)
+                };
+            });
+
+            // Find the best deal (lowest total tax burden)
+            const bestDeal = results.reduce((min, country) =>
+                country.totalTaxAmount < min.totalTaxAmount ? country : min, results[0]);
+
+            displayResults(results, bestDeal);
+        });
+
+        function displayResults(results, bestDeal) {
+            const container = document.querySelector('.country-comparison');
+            const resultsDiv = document.getElementById('taxResults');
+
+            container.innerHTML = results.map(country => `
+                <div class="country-card ${country === bestDeal ? 'best-deal' : ''}">
+                    <h5>
+                        <span class="country-flag">${country.flag}</span>
+                        ${country.name}
+                        ${country === bestDeal ? '<span style="color: #10b981; margin-left: auto;">★ Best Deal</span>' : ''}
+                    </h5>
+
+                    <div class="tax-breakdown">
+                        <div class="tax-item">
+                            <span class="tax-label">Gross Salary (${country.currency})</span>
+                            <span class="tax-value">${country.grossSalaryLocal.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div class="tax-item">
+                            <span class="tax-label">Income Tax</span>
+                            <span class="tax-value">${country.currency} ${country.incomeTaxAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div class="tax-item">
+                            <span class="tax-label">Social Contributions</span>
+                            <span class="tax-value">${country.currency} ${country.socialContributionsAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div class="tax-item">
+                            <span class="tax-label">Employer Contributions</span>
+                            <span class="tax-value">${country.currency} ${country.employerContributionsAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                        </div>
+                        <div class="tax-item">
+                            <span class="tax-label">Other Taxes</span>
+                            <span class="tax-value">${country.currency} ${country.otherTaxesAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                        </div>
+                    </div>
+
+                    <div class="total-tax">
+                        <div class="tax-item">
+                            <span class="tax-label">Total Tax Burden</span>
+                            <span class="tax-value">${country.currency} ${country.totalTaxAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })} (${(country.totalTaxBurden * 100).toFixed(1)}%)</span>
+                        </div>
+                    </div>
+
+                    <div class="tax-item" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(59, 130, 246, 0.2);">
+                        <span class="tax-label">Net Salary</span>
+                        <span class="tax-value" style="color: #10b981; font-weight: 700;">${country.currency} ${country.netSalary.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                    </div>
+
+                    <div style="font-size: 0.8rem; color: #64748b; margin-top: 0.75rem; font-style: italic;">
+                        ${country.notes}
+                    </div>
+                </div>
+            `).join('');
+
+            // Calculate potential savings
+            const highestTaxCountry = results.reduce((max, country) =>
+                country.totalTaxAmount > max.totalTaxAmount ? country : max, results[0]);
+
+            const savingsUSD = highestTaxCountry.totalTaxAmount - bestDeal.totalTaxAmount;
+            const savingsPercentage = ((savingsUSD / highestTaxCountry.grossSalaryLocal) * 100).toFixed(1);
+
+            container.innerHTML += `
+                <div class="tax-savings">
+                    <h6>Potential Annual Savings</h6>
+                    <div class="savings-amount">
+                        ${bestDeal.currency} ${savingsUSD.toLocaleString('en-US', { maximumFractionDigits: 0 })}<br>
+                        <small style="font-size: 0.8rem; color: #fca5a5;">(${savingsPercentage}% of salary)</small>
+                    </div>
+                    <small style="color: #94a3b8; margin-top: 0.5rem; display: block;">
+                        By choosing ${bestDeal.name} over ${highestTaxCountry.name}
+                    </small>
+                </div>
+            `;
+
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
+</body>
+</html>
