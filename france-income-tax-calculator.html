@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>France Income Tax Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 3rem 0 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 140px;
+            height: 45px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .france-flag {
+            width: 40px;
+            height: 30px;
+            border-radius: 4px;
+            margin: 0 1rem;
+            vertical-align: middle;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 6rem 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .hero-section h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .feature-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
+        }
+
+        .feature-card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Calculator */
+        .calculator-wrapper {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-header h3 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+        }
+
+        .calculator-header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(15, 23, 42, 0.8);
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .form-group select option {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 1.25rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Results */
+        .results {
+            margin-top: 2rem;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .results h4 {
+            color: #f1f5f9;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .result-item.income {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border-left: 4px solid #10b981;
+        }
+
+        .result-item .label {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .result-item .value {
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .result-item.total {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%);
+            border-left: 4px solid #3b82f6;
+        }
+
+        .result-item.total .label,
+        .result-item.total .value {
+            color: #3b82f6;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .result-item.income .label,
+        .result-item.income .value {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .tax-brackets {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tax-brackets h5 {
+            color: #f1f5f9;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .bracket-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .bracket-item:last-child {
+            border-bottom: none;
+        }
+
+        .bracket-range {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .bracket-rate {
+            color: #e2e8f0;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .disclaimer {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #93c5fd;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+                padding: 4rem 0;
+            }
+
+            .hero-section h2 {
+                font-size: 2.8rem;
+            }
+
+            .header h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .calculator-wrapper {
+                padding: 2rem;
+            }
+
+            .feature-highlights {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .calculator-wrapper {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">FR</div>
+                <h1>France Income Tax Calculator <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'%3E%3Crect width='20' height='40' fill='%23002654'/%3E%3Crect x='20' width='20' height='40' fill='%23ffffff'/%3E%3Crect x='40' width='20' height='40' fill='%23ed2939'/%3E%3C/svg%3E" alt="France Flag" class="france-flag"></h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="hero-section">
+                <h2>Calculate Your French Income Tax</h2>
+                <p>Discover your net income and tax obligations in France with our comprehensive Impôt sur le Revenu calculator. Includes progressive tax brackets, CSG-CRDS, and social security contributions.</p>
+
+                <div class="feature-highlights">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">🇫🇷</div>
+                        <h3>French Tax System</h3>
+                        <p>Accurate calculations based on official French Impôt sur le Revenu tax brackets</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-icon">💼</div>
+                        <h3>CSG-CRDS</h3>
+                        <p>Includes General Social Contribution (9.2%) and social security</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-icon">📊</div>
+                        <h3>Progressive Tax</h3>
+                        <p>Complete breakdown from 0% to 45% with quotient familial system</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-section">
+                <div class="calculator-wrapper">
+                    <div class="calculator-header">
+                        <h3>Impôt sur le Revenu Calculator</h3>
+                        <p>Enter your annual gross income to calculate French taxes</p>
+                    </div>
+
+                    <form id="franceTaxForm">
+                        <div class="form-group">
+                            <label for="annualIncome">Annual Gross Income (€)</label>
+                            <input type="number" id="annualIncome" placeholder="e.g., 60000" required min="1">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="maritalStatus">Marital Status</label>
+                                <select id="maritalStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="single">Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="divorced">Divorced</option>
+                                    <option value="widowed">Widowed</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="children">Number of Children</label>
+                                <select id="children" required>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4+</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="incomeType">Income Type</label>
+                                <select id="incomeType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="employment">Employment Income</option>
+                                    <option value="self-employed">Self-Employed</option>
+                                    <option value="pension">Pension</option>
+                                    <option value="investment">Investment Income</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="residence">Tax Residence</label>
+                                <select id="residence" required>
+                                    <option value="">Select Residence</option>
+                                    <option value="resident">Tax Resident</option>
+                                    <option value="non-resident">Non-Resident</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="calculate-btn">Calculate French Taxes</button>
+                    </form>
+
+                    <div id="taxResults" class="results" style="display: none;">
+                        <h4>French Tax Calculation</h4>
+                        <div id="resultDetails" class="results-grid"></div>
+
+                        <div class="tax-brackets">
+                            <h5>French Income Tax Brackets (2024)</h5>
+                            <div class="bracket-item">
+                                <span class="bracket-range">€0 - €11,294</span>
+                                <span class="bracket-rate">0%</span>
+                            </div>
+                            <div class="bracket-item">
+                                <span class="bracket-range">€11,295 - €28,797</span>
+                                <span class="bracket-rate">11%</span>
+                            </div>
+                            <div class="bracket-item">
+                                <span class="bracket-range">€28,798 - €82,341</span>
+                                <span class="bracket-rate">30%</span>
+                            </div>
+                            <div class="bracket-item">
+                                <span class="bracket-range">€82,342 - €177,106</span>
+                                <span class="bracket-rate">41%</span>
+                            </div>
+                            <div class="bracket-item">
+                                <span class="bracket-range">Over €177,106</span>
+                                <span class="bracket-rate">45%</span>
+                            </div>
+                        </div>
+
+                        <div class="disclaimer">
+                            <strong>Disclaimer:</strong> This calculator provides estimates based on standard French tax rates and brackets. The French tax system uses the "quotient familial" which divides income by parts based on family situation. Actual tax liability may vary based on specific circumstances, deductions, allowances, and regional factors. Consult with a certified French tax advisor for precise calculations.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // French Tax Brackets (2024) - Based on parts (quotient familial)
+        const taxBrackets = [
+            { min: 0, max: 11294, rate: 0 },
+            { min: 11295, max: 28797, rate: 0.11 },
+            { min: 28798, max: 82341, rate: 0.30 },
+            { min: 82342, max: 177106, rate: 0.41 },
+            { min: 177107, max: Infinity, rate: 0.45 }
+        ];
+
+        // Family quotient parts
+        const familyParts = {
+            single: 1,
+            married: 2,
+            divorced: 1,
+            widowed: 1
+        };
+
+        // Additional parts for children
+        const childParts = {
+            0: 0,
+            1: 0.5,
+            2: 1,
+            3: 1.5,
+            4: 2
+        };
+
+        // CSG-CRDS rates by income type
+        const csgRates = {
+            employment: 0.092,
+            self-employed: 0.092,
+            pension: 0.092,
+            investment: 0.092
+        };
+
+        // Social security rates (approximate averages)
+        const socialSecurityRates = {
+            employment: 0.22, // Employee portion (employer pays additional ~25%)
+            self-employed: 0.45, // Higher rate for self-employed
+            pension: 0.092, // CSG-CRDS only for pensions
+            investment: 0.092 // CSG-CRDS only for investment income
+        };
+
+        document.getElementById('franceTaxForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const annualIncome = parseFloat(document.getElementById('annualIncome').value);
+            const maritalStatus = document.getElementById('maritalStatus').value;
+            const children = parseInt(document.getElementById('children').value);
+            const incomeType = document.getElementById('incomeType').value;
+            const residence = document.getElementById('residence').value;
+
+            if (!annualIncome || !maritalStatus || !incomeType || !residence) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Calculate family quotient
+            const baseParts = familyParts[maritalStatus];
+            const childPart = childParts[Math.min(children, 4)];
+            const totalParts = baseParts + childPart;
+
+            // Income per part (quotient familial)
+            const incomePerPart = annualIncome / totalParts;
+
+            // Calculate income tax per part
+            let incomeTaxPerPart = 0;
+            for (const bracket of taxBrackets) {
+                if (incomePerPart > bracket.min) {
+                    const taxableInBracket = Math.min(incomePerPart, bracket.max) - bracket.min;
+                    incomeTaxPerPart += taxableInBracket * bracket.rate;
+                }
+            }
+
+            // Total income tax
+            const totalIncomeTax = incomeTaxPerPart * totalParts;
+
+            // Calculate CSG-CRDS
+            const csgRate = csgRates[incomeType];
+            const csgAmount = annualIncome * csgRate;
+
+            // Calculate social security contributions
+            const socialSecurityRate = socialSecurityRates[incomeType];
+            const socialSecurityAmount = annualIncome * socialSecurityRate;
+
+            // For non-residents, tax rates may differ
+            let nonResidentAdjustment = 1;
+            if (residence === 'non-resident') {
+                nonResidentAdjustment = 1.2; // 20% surcharge for non-residents
+            }
+
+            // Adjust taxes for non-residents
+            const adjustedIncomeTax = totalIncomeTax * nonResidentAdjustment;
+            const adjustedCSG = residence === 'non-resident' ? 0 : csgAmount; // Non-residents usually exempt from CSG
+
+            // Calculate total deductions and net income
+            const totalDeductions = adjustedIncomeTax + adjustedCSG + socialSecurityAmount;
+            const netIncome = annualIncome - totalDeductions;
+
+            // Calculate effective tax rate
+            const effectiveTaxRate = (totalDeductions / annualIncome) * 100;
+
+            displayResults({
+                annualIncome,
+                totalParts,
+                incomePerPart,
+                totalIncomeTax: adjustedIncomeTax,
+                csgAmount: adjustedCSG,
+                socialSecurityAmount,
+                totalDeductions,
+                netIncome,
+                effectiveTaxRate,
+                residence,
+                incomeType
+            });
+        });
+
+        function displayResults(data) {
+            const results = document.getElementById('taxResults');
+            const resultDetails = document.getElementById('resultDetails');
+
+            const residenceNote = data.residence === 'non-resident' ? ' (20% non-resident surcharge applied)' : '';
+            const csgNote = data.residence === 'non-resident' ? ' (Non-residents typically exempt)' : '';
+
+            resultDetails.innerHTML = `
+                <div class="result-item income">
+                    <span class="label">Annual Gross Income</span>
+                    <span class="value">€${data.annualIncome.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Family Quotient</span>
+                    <span class="value">${data.totalParts.toFixed(1)} parts (€${data.incomePerPart.toLocaleString('en-US', { maximumFractionDigits: 0 })} per part)</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Income Tax (Impôt sur le Revenu)${residenceNote}</span>
+                    <span class="value">€${data.totalIncomeTax.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">CSG-CRDS (9.2%)${csgNote}</span>
+                    <span class="value">€${data.csgAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Social Security (${(socialSecurityRates[document.getElementById('incomeType').value] * 100).toFixed(1)}%)</span>
+                    <span class="value">€${data.socialSecurityAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Effective Tax Rate</span>
+                    <span class="value">${data.effectiveTaxRate.toFixed(1)}%</span>
+                </div>
+                <div class="result-item total">
+                    <span class="label">Total Annual Deductions</span>
+                    <span class="value">€${data.totalDeductions.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+                <div class="result-item income">
+                    <span class="label">Annual Net Income</span>
+                    <span class="value">€${data.netIncome.toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
+                </div>
+            `;
+
+            results.style.display = 'block';
+            results.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
+</body>
+</html>
